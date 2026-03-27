@@ -23,7 +23,13 @@ function ScannerPage() {
 
             <div className="scanner-shell">
                 <Scanner
-                    onScan={handleScan}
+                    onDecode={(result)=>{
+                        console.log("SCANNED",result)
+                        handleScan(result)
+                    }}
+                    onError={(err)=>{
+                        console.log(err)
+                    }}
                     style={{ width: '100%' }}
                     constraints={{ facingMode: 'environment' }}
                 />
