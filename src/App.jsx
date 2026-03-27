@@ -28,7 +28,7 @@ function App() {
       <Route 
       path='/scanner'
       element={
-        <ProtectedRoute>
+        <ProtectedRoute adminOnly={true}>
           <ScannerPage/>
         </ProtectedRoute>
       }/>
