@@ -5,15 +5,19 @@ import { Scanner } from '@yudiel/react-qr-scanner'
 
 function ScannerPage() {
     const [result, setResult] = useState('')
-    const [scanneData,setScanneData]=useState("")
-    const handleScan = async (data) => {
-        if (data) {
-            try {
-                const res = await api.post("/qr/verify", { token:data })
-                setResult(res.data.message)
-            } catch (error) {
-                console.log(error)
-            }
+    const [error, setError] = useState('')
+    const [lastScanned,setLastScanned]=useState('')
+    const handleScan = async (token) => {
+        if(!token|| token===lastScanned) return 
+        try{
+            setLastScanned(token)
+            setError('')
+            const res=await api.post('/qr/verify',{token})
+            setResult(res.data.message)
+        }catch(error){
+            setResult("")
+            setError(error.response.data.message)
+            console.log(error.response.data.message)
         }
     }
     return (
@@ -24,21 +28,26 @@ function ScannerPage() {
 
             <div className="scanner-shell">
                 <Scanner
-                    onDecode={(result)=>{
-                        alert(result);
-                        setScanneData(result)
-                        console.log("SCANNED",result)
-                        handleScan(result)
+                    onScan={(detectedCodes)=>{
+                        const token=detectedCodes?.[0]?.rawValue
+                        console.log('SCANNED:',token,detectedCodes)
+                        if(token){
+                            setResult("")
+                            setError("")
+                            handleScan(token)
+                        }
                     }}
                     onError={(err)=>{
                         console.log(err)
+                        setError(err?.message|| 'camera/scanner error')
                     }}
+                
                     style={{ width: '100%' }}
                     constraints={{ facingMode: 'environment' }}
                 />
             </div>
             {result && <p className="message success-message">{result}</p>}
-                <p>Scanned: {scanneData}</p>
+            {error && <p className="message error-message">{error}</p>}
             </div>
         </section>
     )
