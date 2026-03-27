@@ -5,6 +5,7 @@ import { Scanner } from '@yudiel/react-qr-scanner'
 
 function ScannerPage() {
     const [result, setResult] = useState('')
+    const [scanneData,setScanneData]=useState("")
     const handleScan = async (data) => {
         if (data) {
             try {
@@ -24,6 +25,8 @@ function ScannerPage() {
             <div className="scanner-shell">
                 <Scanner
                     onDecode={(result)=>{
+                        alert(result);
+                        setScanneData(result)
                         console.log("SCANNED",result)
                         handleScan(result)
                     }}
@@ -35,6 +38,7 @@ function ScannerPage() {
                 />
             </div>
             {result && <p className="message success-message">{result}</p>}
+                <p>Scanned: {scanneData}</p>
             </div>
         </section>
     )
