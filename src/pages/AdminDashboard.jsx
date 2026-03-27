@@ -5,7 +5,7 @@ function AdminDashboard() {
     const [logs ,setLogs]=useState([])
     const fetchLogs=async()=>{
         try{
-            const res=await api.get("/admin/getScanLogs")
+            const res=await api.get("/admin/sacnlogs")
             setLogs(res.data.logs)
         }catch(error){
             console.log(error)
