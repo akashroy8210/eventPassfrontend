@@ -2,8 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import api from '../utils/api'
 import { Scanner } from '@yudiel/react-qr-scanner'
+import {useNavigate} from 'react-router-dom'
 
 function ScannerPage() {
+    const navigate=useNavigate()
     const [result, setResult] = useState('')
     const [error, setError] = useState('')
     const [lastScanned,setLastScanned]=useState('')
@@ -14,6 +16,7 @@ function ScannerPage() {
             setError('')
             const res=await api.post('/qr/verify',{token})
             setResult(res.data.message)
+            navigate('/admin')
         }catch(error){
             setResult("")
             setError(error.response.data.message)
